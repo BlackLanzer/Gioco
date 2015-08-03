@@ -36,5 +36,5 @@ class Reg
 	public static var saves:Array<FlxSave> = [];
 	
 	public static var gameWidth:Int = 800;
-	public static var gameHeight:Int = 600;
+	public static var gameHeight:Int = 400;
 }

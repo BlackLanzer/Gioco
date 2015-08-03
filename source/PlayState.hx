@@ -15,12 +15,19 @@ import flixel.util.FlxMath;
 class PlayState extends FlxState
 {
 	private var player:Player;
+	private var level:Level;
 	
 	override public function create():Void
 	{
-		player = new Player(50, 0);
+		player = new Player(0, 0);
+		level = new Level();
 		
+		add(level.tileMap);
 		add(player);
+		
+		//FlxG.camera.setBounds(0, 0, Reg.gameWidth, Reg.gameHeight);
+		FlxG.camera.height = Reg.gameHeight;
+		FlxG.camera.setPosition(player.x, Reg.gameHeight / 2);
 		super.create();
 	}
 	
@@ -32,10 +39,10 @@ class PlayState extends FlxState
 
 	override public function update():Void
 	{
-		
+		FlxG.collide(level.tileMap, player);
 		
 		// gravity
-		player.acceleration.y = 100;
+		player.acceleration.y = 1000;
 		
 		// temporaneamente resta dentro lo schermo (circa)
 		if (player.y >= Reg.gameHeight - player.height)
@@ -50,12 +57,20 @@ class PlayState extends FlxState
 		}
 		
 		handleInput();
-		FlxG.camera.follow(player, FlxCamera.STYLE_PLATFORMER);
+		//FlxG.camera.follow(player, FlxCamera.STYLE_PLATFORMER);
+		FlxG.camera.setPosition(-player.x, Reg.gameHeight / 2);
+		
 		super.update();
 	}	
 	
 	private function handleInput():Void
 	{
+		if (FlxG.keys.anyJustPressed(["ESCAPE"]))
+		{
+			#if neko
+			Sys.exit(0);
+			#end
+		}
 		var moving:Bool = false;
 		if (FlxG.keys.anyPressed(["RIGHT", "D"]))
 		{
